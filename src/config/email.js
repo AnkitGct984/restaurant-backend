@@ -4,14 +4,17 @@ const createTransporter = () => {
   return nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
-    secure: false,
+    secure: process.env.EMAIL_PORT == 465,  // 👈 465 ke liye true, 587 ke liye false
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS
     },
     tls: {
       rejectUnauthorized: false
-    }
+    },
+    connectionTimeout: 10000,  // 👈 10 second timeout (pehle infinite tha, isliye hang ho raha tha)
+    greetingTimeout: 10000,
+    socketTimeout: 10000
   });
 };
 
